@@ -1,3 +1,4 @@
 boto3
 pandas
 pyscopg2-binary
+sqlalchemy

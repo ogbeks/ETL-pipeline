@@ -1,10 +1,10 @@
-import configparser
+from src.utils.database import PostgreSQL_DB
+import src.etl.create_table as ct
 
-# Create a ConfigParser object and read the configuration file
-config = configparser.ConfigParser()
-config.read('config/settings.ini')
-
-# Access the configuration settings
-db_name = config.get('database', 'DB_NAME')
-db_password = config.get('database', 'PASSWORD')
-print(db_name)
+postgresDB = PostgreSQL_DB()
+ct.create_tables()
+postgresDB.execute_query("SELECT * FROM orders ",fetchall=True)
+#postgresDB.execute_query(query,fetchall=False)
+#data.to_csv("dim_products_schema.csv")
+postgresDB.commit()
+postgresDB.close()
