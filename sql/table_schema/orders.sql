@@ -1,4 +1,4 @@
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS chukogbe1619_staging.orders (
     order_id INT PRIMARY KEY NOT NULL,
     customer_id INT NOT NULL,
     order_date DATE NOT NULL,

@@ -16,6 +16,6 @@ response = s3.list_objects(Bucket=bucket_name, Prefix="orders_data")
 # downloading all files
 s3.download_file(bucket_name, "orders_data/orders.csv", "data/raw/orders.csv")
 
-s3.download_file(bucket_name, "orders_data/shipment_deliveries.csv", "data/raw/shipment_deliveries.csv")
+s3.download_file(bucket_name, "orders_data/shipment_deliveries.csv", "data/raw/shipments_deliveries.csv")
 
 s3.download_file(bucket_name, "orders_data/reviews.csv", "data/raw/reviews.csv")

@@ -14,6 +14,9 @@ class PostgreSQL_DB():
     self.PORT = int(config.get("database", "PORT"))
     self.DB_NAME = config.get("database", "DB_NAME")
     self.STAGING_SCHEMA = config.get("database", "STAGING_SCHEMA")
+    # PostgreSQL database connection string
+    self.DB_STRING = f"postgresql+psycopg2://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DB_NAME}"
+
     self.conn = psycopg2.connect(
                       user=self.USERNAME,
                       password=self.PASSWORD,

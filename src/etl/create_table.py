@@ -2,7 +2,7 @@ import os
 import psycopg2
 import sys
 
-from utils.database import PostgreSQL_DB
+from ..utils.database import PostgreSQL_DB
 
 
 def create_tables():
@@ -23,6 +23,7 @@ def create_tables():
                     query = f.read()
                 postgresDB.execute_query(query,fetchall=False)
                 postgresDB.commit()
+                print(file)
             
     except (Exception, psycopg2.DatabaseError) as error:
         print(error, file)
