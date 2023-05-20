@@ -1,3 +1,2 @@
-,ingestion_date,year_num,tt_order_hol_jan,tt_order_hol_feb,tt_order_hol_mar,tt_order_hol_apr,tt_order_hol_may,tt_order_hol_jun,tt_order_hol_jul,tt_order_hol_aug,tt_order_hol_sep,tt_order_hol_oct,tt_order_hol_nov,tt_order_hol_dec
-0,2023-05-20,2022,0,17,13,12,0,0,13,17,0,0,0,0
-1,2023-05-20,2021,20,0,16,20,0,0,0,18,0,16,12,0
+,ingestion_date,tt_order_hol_jan,tt_order_hol_feb,tt_order_hol_mar,tt_order_hol_apr,tt_order_hol_may,tt_order_hol_jun,tt_order_hol_jul,tt_order_hol_aug,tt_order_hol_sep,tt_order_hol_oct,tt_order_hol_nov,tt_order_hol_dec
+0,2023-05-20,20,17,29,32,0,0,13,35,0,16,12,0

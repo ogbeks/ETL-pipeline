@@ -25,7 +25,6 @@ orders_public_holiday AS(
 
 SELECT 
   CURRENT_DATE AS ingestion_date,
-  year_num,
   COUNT(month_num=1 OR NULL) tt_order_hol_jan,
   COUNT(month_num=2 OR NULL) tt_order_hol_feb,
   COUNT(month_num=3 OR NULL) tt_order_hol_mar,
@@ -42,5 +41,4 @@ SELECT
 FROM orders_public_holiday oph
 
 GROUP BY
-  CURRENT_DATE,
-  year_num
+  CURRENT_DATE

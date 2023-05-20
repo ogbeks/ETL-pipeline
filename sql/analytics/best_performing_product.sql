@@ -18,6 +18,11 @@ dim_dates AS(
   FROM if_common.dim_dates
 ),
 
+dim_products AS(
+  SELECT * 
+  FROM if_common.dim_products
+),
+
 reviews_counts AS (
 SELECT 
   product_id,
@@ -39,7 +44,17 @@ SELECT
   two_star_review / CAST(tt_review_points AS FLOAT) pct_two_star_review,
   three_star_review / CAST(tt_review_points AS FLOAT) pct_three_star_review,
   four_star_review / CAST(tt_review_points AS FLOAT) pct_four_star_review,
-  five_star_review / CAST(tt_review_points AS FLOAT) pct_five_star_review
+  five_star_review / CAST(tt_review_points AS FLOAT) pct_five_star_review,
+  (
+    (
+      one_star_review * 1 + two_star_review * 2 + three_star_review * 3  
+      + four_star_review * 4 + five_star_review * 5
+      
+    )
+    /
+    CAST(tt_review_points AS FLOAT)
+  ) AS avg_review
+
 FROM reviews_counts
 ),
 
@@ -66,25 +81,59 @@ products_orders AS (
   GROUP BY
     product_id,
     order_date
+),
+
+products_orders_summary AS (
+  SELECT DISTINCT
+    CAST (product_id AS INT) product_id,
+    FIRST_VALUE(order_date) OVER (by_product_orders) AS most_ordered_day,
+    SUM(total_orders) OVER (by_product) AS tt_orders,
+    SUM(tt_early_shipments) OVER (by_product)/ CAST(SUM(total_orders) OVER (by_product) AS FLOAT) AS pct_early_shipments,
+    SUM(tt_late_shipments) OVER (by_product)/ CAST(SUM(total_orders) OVER (by_product) AS FLOAT) AS pct_late_shipments
+
+  FROM products_orders po
+
+  WINDOW
+    by_product AS(
+      PARTITION BY product_id
+    ),
+    by_product_orders AS(
+      by_product 
+      ORDER BY total_orders DESC, order_date DESC
+    )
 )
 
-SELECT DISTINCT
-  product_id,
-  FIRST_VALUE(order_date) OVER (PARTITION BY product_id ORDER BY total_orders DESC, order_date DESC) AS most_ordered_day,
-  SUM(total_orders) OVER (PARTITION BY product_id) AS tt_orders,
-  SUM(tt_early_shipments) OVER (PARTITION BY product_id)/ CAST(SUM(total_orders) OVER (PARTITION BY product_id) AS FLOAT) AS pct_early_shipments,
-  SUM(tt_late_shipments) OVER (PARTITION BY product_id)/ CAST(SUM(total_orders) OVER (PARTITION BY product_id) AS FLOAT) AS pct_late_shipments
+SELECT 
+  CURRENT_DATE AS ingestion_date,
+  dp.product_name,
+  pr.avg_review,
+  pos.most_ordered_day,
+  CASE 
+    WHEN dd.day_of_the_week_num BETWEEN 1 AND 5 AND NOT dd.working_day 
+      THEN TRUE
+    ELSE FALSE
+  END AS is_public_holiday,
+  pr.tt_review_points,
+  pr.pct_one_star_review,
+  pr.pct_two_star_review,
+  pr.pct_three_star_review,
+  pr.pct_four_star_review,
+  pr.pct_five_star_review,
+  pct_early_shipments,
+  pct_late_shipments
 
-FROM products_orders po
+FROM products_reviews pr
 
-WINDOW
-  by_product AS(
-    PARTITION BY product_id
-  ),
-  by_product_orders AS(
-    by_product 
-    ORDER BY total_orders DESC, order_date DESC
-  )
+JOIN dim_products dp
+ON pr.product_id = dp.product_id 
+
+JOIN products_orders_summary pos 
+ON pr.product_id = pos.product_id
+
+JOIN dim_dates dd
+ON pos.most_ordered_day = dd.calendar_dt
+
+ORDER BY pr.avg_review DESC LIMIT 1
 
 
 
