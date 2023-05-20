@@ -1,10 +1,20 @@
-# data2bot_assessment
+# DATA2BOT DATA ENGINEERING ASSESSMENT
 This repository details the Data2bot Data Engineering Assessment.
 
-# My Approach
+# MY APPROACH
 Following the Assessment Guideline, The ETL pipeline was built using python and SQL queries only.
 My simple approach was to have proper structure of directory to build the pipeline.
-This implies that I will be making use of OOP python class and modules files, and SQL queries files stored in a structured file directory.
+This implies that I will be making use of OOP python class and modules files, and SQL queries files stored in a structured file directory. 
+My thought process can be summarized in the following steps;
+1. Store all secret keys and credentials in config file (for data security)
+2. Extract the raw data (orders, reviews, shipments_deliveries) from S3 buckets
+3. Create a PostgreSQL Class that handles all the communications such as connection, reading data, loading data etc
+4. Create the DDL queries for staging_schema tables and analytics schema tables
+5. Implement the Module that handles the creation of the staging_schema tables and analytics_schema tables in the PostgreSQL DB
+6. Implement the Module that handles the loading of the extracted raw data into the PostgreSQL DB Staging_schema instance
+7. Create SQL queries for the analytics results
+8. Implement the Modules that run the analytics results queries, load the data into the Analytic_schema instance and upload the result into S3 bucket Analytics_export
+
 
 # FILE DIRECTORY EXPLAINED
 The full file and directory on one view
@@ -66,6 +76,13 @@ The full file and directory on one view
 
 -- main.py --\
 This is the main program that run ETL pipeline.
+
+# FUTURE IMPROVEMENT
+This is a basic ETL pipeline, In a real projects, I will explore a robust procedure to run the ETL pipeline by utilizing tools such as Docker to set up the environment and my configuration setting will be stored in the DockerFile. Thus, I will only reference the credential using the system environment. Also, I will explore the use of Airflow to run the work orchestration that occassionally load the data into the PostgreSQL table.
+
+For a robust Analytics, I will make use of DBT to build my analytics queries and running the process of further analytics answers to questions.
+
+
 
 
 
