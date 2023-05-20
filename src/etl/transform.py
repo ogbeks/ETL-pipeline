@@ -6,9 +6,9 @@ from psycopg2 import sql
 from ..utils.database import PostgreSQL_DB
 
 
-def create_tables():
+def transform_table():
     """ create tables in the PostgreSQL database"""
-    folder_path = 'sql/table_schema'
+    folder_path = 'sql/analytics'
     postgresDB = PostgreSQL_DB()
     try:
         # create table one by one
@@ -23,8 +23,8 @@ def create_tables():
                 with open(file_path, "r") as f:
                     query = f.read()
                 query=sql.SQL(query).format(schema_name=sql.Identifier(postgresDB.STAGING_SCHEMA))
-                postgresDB.execute_query(query,fetchall=False)
-                postgresDB.commit()
+                data = postgresDB.execute_query(query,fetchall=True)
+                data.to_csv(f"data/analytics/{file.split('.')[0]}.csv")
                 print(file)
             
     except (Exception, psycopg2.DatabaseError) as error:

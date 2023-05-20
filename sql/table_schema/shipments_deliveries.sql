@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS  chukogbe1619_staging.shipments_deliveries (
+CREATE TABLE IF NOT EXISTS  {schema_name}.shipments_deliveries (
 
     shipment_id INT PRIMARY KEY  NOT NULL,
     order_id INT NOT NULL,
